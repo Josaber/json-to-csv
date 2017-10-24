@@ -19,9 +19,15 @@ package org.jsontocsv;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsontocsv.parser.JSONFlattener;
 import org.jsontocsv.writer.CSVWriter;
+
+import static org.jsontocsv.writer.CSVWriter.collectHeaders;
+import static org.jsontocsv.writer.CSVWriter.getHeaderString;
+import static org.jsontocsv.writer.CSVWriter.getSeperatedColumns;
 
 public class Main {
 
@@ -29,6 +35,8 @@ public class Main {
 
         traverseFolder("files/");
     }
+
+    static boolean header = true;
 
     public static void traverseFolder(String path) {
         File file = new File(path);
@@ -40,9 +48,18 @@ public class Main {
                     if (fileSub.isDirectory()) {
                         traverseFolder(fileSub.getAbsolutePath());
                     } else {
-                        if(fileSub.getAbsolutePath().toLowerCase().endsWith(".json")) {
+                        if (fileSub.getAbsolutePath().toLowerCase().endsWith(".json")) {
                             flatJson = JSONFlattener.parseJson(fileSub, "UTF-8");
-                            CSVWriter.writeToFile(CSVWriter.getCSV(flatJson, ","), "files/result.csv");
+                            String csvString = "";
+                            if (header) {
+                                csvString = getHeaderString(flatJson);
+                                header = false;
+                            }
+                            for (Map<String, String> map : flatJson) {
+                                csvString = csvString + getSeperatedColumns(collectHeaders(flatJson), map, ",") + "\n";
+                            }
+
+                            CSVWriter.writeToFile(csvString, "files/result.csv");
                         }
                     }
                 }

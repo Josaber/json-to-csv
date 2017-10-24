@@ -66,6 +66,11 @@ public class CSVWriter {
         return csvString;
     }
 
+    public static String getHeaderString(List<Map<String, String>> flatJson) {
+        Set<String> headers = collectHeaders(flatJson);
+         return StringUtils.join(headers.toArray(), ",") + "\n";
+    }
+
     /**
      * Write the given CSV string to the given file.
      *
@@ -88,7 +93,7 @@ public class CSVWriter {
      *
      * @return a string composed of columns separated by a specific separator.
      */
-    private static String getSeperatedColumns(Set<String> headers, Map<String, String> map, String separator) {
+    public static String getSeperatedColumns(Set<String> headers, Map<String, String> map, String separator) {
         List<String> items = new ArrayList<String>();
         for (String header : headers) {
             String value = map.get(header) == null ? "" : map.get(header).replaceAll("[\\,\\;\\r\\n\\t\\s]+", " "); 
@@ -105,7 +110,7 @@ public class CSVWriter {
      *
      * @return a Set of headers
      */
-    private static Set<String> collectHeaders(List<Map<String, String>> flatJson) {
+    public static Set<String> collectHeaders(List<Map<String, String>> flatJson) {
         Set<String> headers = new LinkedHashSet<String>();
 
         for (Map<String, String> map : flatJson) {
