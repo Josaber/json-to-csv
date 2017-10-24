@@ -19,9 +19,7 @@ package org.jsontocsv;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jsontocsv.parser.JSONFlattener;
 import org.jsontocsv.writer.CSVWriter;
 
