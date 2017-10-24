@@ -29,8 +29,34 @@ public class Main {
         /*
          *  Parse a JSON File and convert it to CSV
          */
-        List<Map<String, String>> flatJson = JSONFlattener.parseJson(new File("files/2017-10-23T14:00:20Z.json"), "UTF-8");
-        // Using ',' as separatorR
-        CSVWriter.writeToFile(CSVWriter.getCSV(flatJson, ","), "files/2017-10-23T14:00:20Z.csv");
+        traverseFolder("files/");
+    }
+
+    public static void traverseFolder(String path) {
+
+        File file = new File(path);
+        List<Map<String, String>> flatJson;
+        if (file.exists()) {
+            File[] files = file.listFiles();
+            if (files.length == 0) {
+//                System.out.println("文件夹是空的!");
+                return;
+            } else {
+                for (File fileSub : files) {
+                    if (fileSub.isDirectory()) {
+//                        System.out.println("文件夹:" + fileSub.getAbsolutePath());
+                        traverseFolder(fileSub.getAbsolutePath());
+                    } else {
+                        if(!fileSub.getAbsolutePath().toLowerCase().endsWith(".json"))
+                            continue;
+                        flatJson = JSONFlattener.parseJson(fileSub, "UTF-8");
+                        CSVWriter.writeToFile(CSVWriter.getCSV(flatJson, ","), "files/result.csv");
+//                        System.out.println("文件:" + fileSub.getAbsolutePath());
+                    }
+                }
+            }
+        } else {
+//            System.out.println("文件不存在!");
+        }
     }
 }
