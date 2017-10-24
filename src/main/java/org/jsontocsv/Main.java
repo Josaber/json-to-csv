@@ -26,37 +26,27 @@ import org.jsontocsv.writer.CSVWriter;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        /*
-         *  Parse a JSON File and convert it to CSV
-         */
+
         traverseFolder("files/");
     }
 
     public static void traverseFolder(String path) {
-
         File file = new File(path);
         List<Map<String, String>> flatJson;
         if (file.exists()) {
             File[] files = file.listFiles();
-            if (files.length == 0) {
-//                System.out.println("文件夹是空的!");
-                return;
-            } else {
+            if (files.length != 0) {
                 for (File fileSub : files) {
                     if (fileSub.isDirectory()) {
-//                        System.out.println("文件夹:" + fileSub.getAbsolutePath());
                         traverseFolder(fileSub.getAbsolutePath());
                     } else {
-                        if(!fileSub.getAbsolutePath().toLowerCase().endsWith(".json"))
-                            continue;
-                        flatJson = JSONFlattener.parseJson(fileSub, "UTF-8");
-                        CSVWriter.writeToFile(CSVWriter.getCSV(flatJson, ","), "files/result.csv");
-//                        System.out.println("文件:" + fileSub.getAbsolutePath());
+                        if(fileSub.getAbsolutePath().toLowerCase().endsWith(".json")) {
+                            flatJson = JSONFlattener.parseJson(fileSub, "UTF-8");
+                            CSVWriter.writeToFile(CSVWriter.getCSV(flatJson, ","), "files/result.csv");
+                        }
                     }
                 }
             }
-        } else {
-//            System.out.println("文件不存在!");
         }
     }
 }
