@@ -17,7 +17,6 @@
 package org.jsontocsv;
 
 import java.io.File;
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -28,52 +27,10 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         /*
-         *  Parse a JSON String and convert it to CSV
-         */
-        List<Map<String, String>> flatJson = JSONFlattener.parseJson(jsonString());
-        // Using the default separator ','
-        CSVWriter.writeToFile(CSVWriter.getCSV(flatJson), "files/sample_string.csv");
-
-        /*
          *  Parse a JSON File and convert it to CSV
          */
-        flatJson = JSONFlattener.parseJson(new File("files/simple.json"), "UTF-8");
-        // Using ';' as separator
-        CSVWriter.writeToFile(CSVWriter.getCSV(flatJson, ";"), "files/sample_file.csv");
-
-        /*
-         *  Parse JSON from URL and convert it to CSV
-         */
-        flatJson = JSONFlattener.parseJson(new URI("http://echo.jsontest.com/firstname/Brahim/lastName/Arkni"));
-        // Using '\t' as separator
-        CSVWriter.writeToFile(CSVWriter.getCSV(flatJson, "\t"), "files/sample_uri.csv");
-	
-	/*
-         *  Parse a Large JSON File and convert it to CSV
-         */
-        flatJson = JSONFlattener.parseJson(new File("files/sample_large.json"), "UTF-8");
-        // Using ';' as separator
-        Set<String> header = CSVWriter.collectOrderedHeaders(flatJson);
-        // the intention is generate a csv file with specific headers - not all
-        CSVWriter.writeLargeFile(flatJson, ";", "files/sample_largeFile.csv", header);  
-    }
-
-    private static String jsonString() {
-        return  "[" +
-                "    {" +
-                "        \"studentName\": \"Foo\"," +
-                "        \"Age\": \"12\"," +
-                "        \"subjects\": [" +
-                "            {" +
-                "                \"name\": \"English\"," +
-                "                \"marks\": \"40\"" +
-                "            }," +
-                "            {" +
-                "                \"name\": \"History\"," +
-                "                \"marks\": \"50\"" +
-                "            }" +
-                "        ]" +
-                "    }" +
-                "]";
+        List<Map<String, String>> flatJson = JSONFlattener.parseJson(new File("files/2017-10-23T14:00:20Z.json"), "UTF-8");
+        // Using ',' as separatorR
+        CSVWriter.writeToFile(CSVWriter.getCSV(flatJson, ","), "files/2017-10-23T14:00:20Z.csv");
     }
 }
